@@ -3,6 +3,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver import ChromeOptions
 import pandas as pd
 
+# def check_monster_in_xlsx(monster_name):
+#     print(monster_name)
+#     try:
+#         test_df = pd.read_excel('osrs_monsters.xlsx', engine='openpyxl')
+#     except:
+#         return False
+    
+#     print(test_df['Monster name'].values)
+#     return monster_name in test_df['Monster name'].values
+
 def open_url_in_chrome(url):
     
     options = ChromeOptions()
@@ -19,20 +29,19 @@ def open_url_in_chrome(url):
     
     # encontra os headers da tabela
     complete_monster_table = driver.find_element(by=By.TAG_NAME, value='table')
-    table_headers = complete_monster_table.find_elements(by=By.TAG_NAME, value='th')
+    complete_monster_table_headers = complete_monster_table.find_elements(by=By.TAG_NAME, value='th')
     
     header_names = []
     monster_row_data = {}
     all_monsters_data = []
     
-    for header in table_headers:
+    for header in complete_monster_table_headers:
         if header.text != '':
             header_names.append(header.text)
         else:
             title = header.find_element(by=By.TAG_NAME, value='img')
             header_names.append(title.get_dom_attribute('alt'))
-    
-    print(header_names)
+
             
     # encontra os valores
     table_rows = complete_monster_table.find_elements(by=By.TAG_NAME, value='tr')
@@ -43,7 +52,7 @@ def open_url_in_chrome(url):
         table_data = table_row.find_elements(by=By.TAG_NAME, value='td')
         index_counter = 2
         for data in table_data:
-        
+            # começa checagem de tipo de coluna: imagem, nome, member e resto
             images = data.find_elements(by=By.TAG_NAME, value='img')
             if images:
                 image_src = images[0].get_dom_attribute('src')
@@ -74,18 +83,22 @@ def open_url_in_chrome(url):
                     found_i = found_i_tag.text
                     monster_name = monster_name + f' ({found_i})'
                     found_i = ''
-                    
+                
+                # if check_monster_in_xlsx(monster_name):
+                #     break
+
                 monster_row_data['Monster name'] = monster_name
-                        
-            all_monsters_data.append(monster_row_data)
+            # finaliza checagem de tipo de coluna
+
+        if monster_row_data == {}:
+            continue
+        all_monsters_data.append(monster_row_data)
         print(monster_row_data)
-            
-    
-    df = pd.DataFrame(all_monsters_data)
-    df.to_excel('osrs_monsters.xlsx', index=False, engine='openpyxl')
+        df = pd.DataFrame(all_monsters_data)
+        df.to_excel('osrs_monsters.xlsx', index=False, engine='openpyxl')
+
     driver.quit()
 
 if __name__ == "__main__":
-
     url = 'https://oldschool.runescape.wiki/w/Bestiary'
     open_url_in_chrome(url)
