@@ -28,7 +28,7 @@ def find_all_xlsx_monsters():
         if (len(df_to_find_existents) > 0):
             to_json_on_existents = df_to_find_existents.to_json(orient='records')
             parsed_existents = json.loads(to_json_on_existents)
-            # final_existents_list = json.dumps(parsed_existents, indent=4)
+
             return parsed_existents
     return []
 
@@ -45,10 +45,15 @@ def open_url_in_chrome(url):
     li_bestiary_list = ul_bestiary_list.find_elements(By.TAG_NAME, value='a')
     
     all_monsters_data = find_all_xlsx_monsters()
+
     # itera cada range de lvl
-    for level_range in li_bestiary_list:
-        level_range.click()
-        driver.implicitly_wait(5)
+    for index, level_range in enumerate(li_bestiary_list):
+        bestiary_list = driver.find_element(by=By.CLASS_NAME, value='div-col')
+        ul_bestiary_list = bestiary_list.find_element(By.TAG_NAME, value='ul')
+        li_bestiary_list = ul_bestiary_list.find_elements(By.TAG_NAME, value='a')
+        print('entrou na range: ', li_bestiary_list[index].text)
+        li_bestiary_list[index].click()
+        driver.implicitly_wait(1)
     
         # encontra os headers da tabela após clicar no range de lvl
         complete_monster_table = driver.find_element(by=By.TAG_NAME, value='table')
@@ -67,6 +72,7 @@ def open_url_in_chrome(url):
                 
         # encontra os valores
         table_rows = complete_monster_table.find_elements(by=By.TAG_NAME, value='tr')
+        print(len(table_rows))
         index_to_start = 0
         if (len(all_monsters_data) > 0):
             index_to_start = find_last_xlsx_monster()
