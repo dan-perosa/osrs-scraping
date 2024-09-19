@@ -45,7 +45,9 @@ def open_url_in_chrome(url):
     li_bestiary_list = ul_bestiary_list.find_elements(By.TAG_NAME, value='a')
     
     all_monsters_data = find_all_xlsx_monsters()
-
+    
+    summed_all_number_of_monsters_in_wiki_table = 0
+    
     # itera cada range de lvl
     for index, level_range in enumerate(li_bestiary_list):
         bestiary_list = driver.find_element(by=By.CLASS_NAME, value='div-col')
@@ -73,12 +75,23 @@ def open_url_in_chrome(url):
         # encontra os valores
         table_rows = complete_monster_table.find_elements(by=By.TAG_NAME, value='tr')
         print(len(table_rows))
-        index_to_start = 0
+        
+        number_of_monsters_in_wiki_table = len(table_rows)
+        summed_all_number_of_monsters_in_wiki_table += number_of_monsters_in_wiki_table
+        
         if (len(all_monsters_data) > 0):
-            index_to_start = find_last_xlsx_monster()
-            
+            total_monsters_in_xlsx = find_last_xlsx_monster()
+        
+        if total_monsters_in_xlsx >= summed_all_number_of_monsters_in_wiki_table:
+            print('total_monsters in xlsx maior ou igual que a soma das table')
+            already_in_xlsx_monsters = number_of_monsters_in_wiki_table
+        
+        if total_monsters_in_xlsx < summed_all_number_of_monsters_in_wiki_table:
+            print('total_monsters in xlsx menor que a soma das table')
+            already_in_xlsx_monsters = number_of_monsters_in_wiki_table - (summed_all_number_of_monsters_in_wiki_table - total_monsters_in_xlsx)
+        
         for index, table_row in enumerate(table_rows):
-            if index < index_to_start:
+            if index < already_in_xlsx_monsters:
                 print('pulando linha ', index)
                 continue
             monster_exists = False
