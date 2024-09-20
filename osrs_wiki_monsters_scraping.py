@@ -4,7 +4,7 @@ from selenium.webdriver import ChromeOptions
 import pandas as pd
 import json
 import os
-import time
+
 
 def check_monster_in_xlsx(monster_name):
     print(monster_name)
@@ -56,7 +56,11 @@ def open_url_in_chrome(url):
         bestiary_list = driver.find_element(by=By.CLASS_NAME, value='div-col')
         ul_bestiary_list = bestiary_list.find_element(By.TAG_NAME, value='ul')
         li_bestiary_list = ul_bestiary_list.find_elements(By.TAG_NAME, value='a')
+        
+        for item in li_bestiary_list:
+            print(item.text)
         print('entrou na range: ', li_bestiary_list[index].text)
+
         li_bestiary_list[index].click()
         driver.implicitly_wait(1)
     
