@@ -53,6 +53,9 @@ for table in filtered_tables:
                     quest['Quest Points'] = 0
                     print('deopis', quest)
                     continue
+                if td_index > 2:
+                    quest[filtered_header_names[td_index + 1]] = td.text
+                    continue
                 quest[filtered_header_names[td_index]] = td.text
                 print('finalzin', quest)
                 continue
