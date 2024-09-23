@@ -4,6 +4,7 @@ from selenium.webdriver import ChromeOptions
 import pandas as pd
 import json
 import os
+import time
 
 
 def check_monster_in_xlsx(monster_name):
@@ -62,7 +63,7 @@ def open_url_in_chrome(url):
         print('entrou na range: ', li_bestiary_list[index].text)
 
         li_bestiary_list[index].click()
-        driver.implicitly_wait(1)
+        time.sleep(5)
     
         # encontra os headers da tabela após clicar no range de lvl
         complete_monster_table = driver.find_element(by=By.TAG_NAME, value='table')
@@ -152,7 +153,7 @@ def open_url_in_chrome(url):
                 print('pulando monstro')
                 continue
             
-            all_monsters_data.append(monster_row_data)
+            all_monsters_data.append(monster_row_data)       
             print(monster_row_data)
             if not os.path.isfile('osrs_monsters.xlsx'):
                 df = pd.read_excel('osrs_monsters.xlsx', engine='openpyxl')

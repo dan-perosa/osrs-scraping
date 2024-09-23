@@ -34,7 +34,7 @@ url = 'https://oldschool.runescape.wiki/w/Worn_Equipment'
 
 options = ChromeOptions()
 options.add_argument("--headless=new")
-driver = webdriver.Chrome(options=options) 
+driver = webdriver.Chrome() 
 driver.get(url)
 driver.implicitly_wait(2)
 
