@@ -38,7 +38,7 @@ def open_url_in_chrome(url):
     
     options = ChromeOptions()
     options.add_argument("--headless=new")
-    driver = webdriver.Chrome() 
+    driver = webdriver.Chrome(options=options) 
     driver.get(url)
     driver.implicitly_wait(2)
     
