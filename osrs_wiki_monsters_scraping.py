@@ -38,7 +38,7 @@ def open_url_in_chrome(url):
     
     options = ChromeOptions()
     options.add_argument("--headless=new")
-    driver = webdriver.Chrome(options=options) 
+    driver = webdriver.Chrome() 
     driver.get(url)
     driver.implicitly_wait(2)
     
@@ -53,16 +53,13 @@ def open_url_in_chrome(url):
     
     # itera cada range de lvl
     for index, level_range in enumerate(li_bestiary_list):
-        
+        time.sleep(5) 
         bestiary_list = driver.find_element(by=By.CLASS_NAME, value='div-col')
         ul_bestiary_list = bestiary_list.find_element(By.TAG_NAME, value='ul')
         li_bestiary_list = ul_bestiary_list.find_elements(By.TAG_NAME, value='a')
-        
-        for item in li_bestiary_list:
-            print(item.text)
+        element_to_click = li_bestiary_list[index]
         print('entrou na range: ', li_bestiary_list[index].text)
-
-        li_bestiary_list[index].click()
+        element_to_click.click()
         time.sleep(5)
     
         # encontra os headers da tabela após clicar no range de lvl
