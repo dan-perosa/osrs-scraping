@@ -58,9 +58,16 @@ def open_url_in_chrome(url):
         ul_bestiary_list = bestiary_list.find_element(By.TAG_NAME, value='ul')
         li_bestiary_list = ul_bestiary_list.find_elements(By.TAG_NAME, value='a')
         element_to_click = li_bestiary_list[index]
+        if '> 400' in li_bestiary_list[index].text:
+            last_page_check = True
         print('entrou na range: ', li_bestiary_list[index].text)
         element_to_click.click()
         time.sleep(5)
+        
+        # aqui precisa checar se é o ultimo link para poder pegar todas as tabelas todo
+        if last_page_check:
+            
+        # final_bestiary_page_all_monsters_tables = driver.find_element(by=By.CLASS_NAME, value='wikitable sortable align-center-1 align-left-2 align-left-3 align-center-4 align-center-5 align-center-6 align-center-7 align-center-8 align-center-9 jquery-tablesorter')
     
         # encontra os headers da tabela após clicar no range de lvl
         complete_monster_table = driver.find_element(by=By.TAG_NAME, value='table')
