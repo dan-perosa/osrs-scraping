@@ -54,9 +54,12 @@ summed_all_number_of_equipments_in_wiki_tables = 0
 for equipment_type in equipment_types_to_click:
     
     # clica em cada tipo de equipamento na pagina inicial
-    time.sleep(5)
-    equipment_type.click()
-    time.sleep(5)
+    time.sleep(2)
+    try:
+        equipment_type.click()
+    except:
+        driver.execute_script("arguments[0].click()", equipment_type)
+    time.sleep(2)
     
     # encontra os headers da tabela após clicar no range de lvl
     both_tables = driver.find_elements(by=By.TAG_NAME, value='table')
