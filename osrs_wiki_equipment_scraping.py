@@ -34,7 +34,7 @@ url = 'https://oldschool.runescape.wiki/w/Worn_Equipment'
 
 options = ChromeOptions()
 options.add_argument("--headless=new")
-driver = webdriver.Chrome(options=options) 
+driver = webdriver.Chrome() 
 driver.get(url)
 driver.implicitly_wait(2)
 
@@ -51,14 +51,20 @@ all_equipment_data = mount_equipment_data()
 
 summed_all_number_of_equipments_in_wiki_tables = 0
     
-for equipment_type in equipment_types_to_click:
+for equipment_type_index, equipment_type in enumerate(equipment_types_to_click):
+    # procura denovo os elementos pra clicar
+    outside_div = driver.find_element(by=By.CLASS_NAME, value='mw-parser-output')
+    all_a_tags = outside_div.find_elements(by=By.TAG_NAME, value='a')
+    equipment_types_to_click: list[WebElement] = []
+
+    for a_tag in all_a_tags:
+        if a_tag.text != None:
+            if 'slot table' in a_tag.text:
+                equipment_types_to_click.append(a_tag)
     
     # clica em cada tipo de equipamento na pagina inicial
     time.sleep(2)
-    try:
-        equipment_type.click()
-    except:
-        driver.execute_script("arguments[0].click()", equipment_type)
+    equipment_types_to_click[equipment_type_index].click()
     time.sleep(2)
     
     # encontra os headers da tabela após clicar no range de lvl
